@@ -1,0 +1,118 @@
+.inner{
+    display: flex;
+   
+}
+.navbar{
+    width: 300px;
+    border: solid 2px;
+    height: 100vh;
+    text-align:center;
+}
+.board{
+    border: solid 2px;
+    padding: 30px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    height: 100vh;
+    overflow-y: auto;
+
+    /* column-gap: 20px;
+    grid-template-columns: auto auto; */
+   
+    
+}
+.noteCont{
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    /* line-height: 1.5; */
+    margin: 20px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+.overlay{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    display: none;
+    justify-content: center;
+    align-items: center;   
+}
+.overlay1{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    display: none;
+    justify-content: center;
+    align-items: center;   
+}
+.noteForm{
+    background-color: rgba(216, 208, 208);
+    border-radius: 8px;
+    height: 500px;
+    max-height: 1500px;
+    width: 800px;
+    padding: 10px;
+    margin: 0 auto;
+    padding: 30px;
+    margin-top: 120px;  
+    overflow: auto;
+}
+.viewForm{
+    background-color: rgba(216, 208, 208);
+    border-radius: 8px;
+    height: 500px;
+    max-height: 1500px;
+    width: 800px;
+    padding: 10px;
+    margin: 0 auto;
+    padding: 30px;
+    margin-top: 120px;  
+    overflow: auto;
+}
+textarea{
+    resize: none;
+}
+
+.paginat{
+    border: solid 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 10px;
+}
+.paginat a{
+    text-decoration: none;
+    color: black;
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 90px;
+    border-radius: 6px;
+}
+.paginat a:hover{
+    color: white;
+    background-color: violet;
+}
+.withNum{
+    width: 50px !important;
+    height: 40px !important;
+    
+}
