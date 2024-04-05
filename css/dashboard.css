@@ -116,3 +116,6 @@ textarea{
     height: 40px !important;
     
 }
+.confirmBox{
+    display: none;
+}

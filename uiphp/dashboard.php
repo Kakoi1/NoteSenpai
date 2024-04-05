@@ -23,12 +23,11 @@ include_once ('..//connection/dbConnect.php');
                         <div id="addNote"><p>Add Notes</p></div>                        
                     </div>
             </div>
-
+            <form action=""></form>
             <div class="boardPag">
             <div class="board">
-              
+             <input type="hidden" name="notId">
     <?php
-
         $limito = 3; 
         $page = isset($_GET['page']) ? $_GET['page'] : 1; 
         $starto = ($page - 1) * $limito;
@@ -54,8 +53,20 @@ include_once ('..//connection/dbConnect.php');
                             <h2> Note #{$row['n_id']}</h2>
                             <h1>{$row['n_title']}</h1>
                             <h3>{$row['n_date']}</h3>
-                            <button id = 'views' onclick='openNote()'>view</button>
+                            <div>     
 
+                                <button id = 'views' onclick='openNote()'>view</button>
+
+                                <form action='viewing.php' method ='post'>
+                               <button id = 'edit' onclick=''>edit</button>
+                               <input type='hidden' name='notId' value = ' {$row['n_id']}'>
+                               </form>
+
+                              
+                               <button id = 'del' name = 'del' onclick=\"idTodele(" . $row["n_id"] . ", '" . $row["n_title"] . "')\">delete</button>
+                               
+
+                            </div>
                         </div>";
 
                 }
@@ -154,13 +165,36 @@ include_once ('..//connection/dbConnect.php');
             ?>
             </div>
 
+    <div class = 'confirmBox' id = 'confirmBox'>
+        <h3>Are you Sure? <p id ="nameDel"></p></h3>
 
+            <form action='' method ='post'>
+                <button id = 'del' name = 'del'>delete</button>
+                <input type='hidden' id = 'noteId' name='noteId'>
+            </form>
+            <button id="cance" name="cance" onclick="cancelDel()">cancel</button>
+    </div>
 
         </div>
 
     </div>
 
 <script src="..//script/jsCode.js"></script>
+
+<script>
+
+    function idTodele(id, title){
+        document.getElementById('noteId').value = id;
+        document.getElementById('nameDel').innerHTML = title;
+        document.getElementById('confirmBox').style.display = 'block';
+    }
+    function cancelDel(){
+        document.getElementById('noteId').value = "";
+        document.getElementById('nameDel').innerHTML = "";
+        document.getElementById('confirmBox').style.display = 'none';
+    }
+
+</script>
 
 <script>
 
@@ -177,11 +211,14 @@ include_once ('..//connection/dbConnect.php');
      
 </body>
 </html>
+<!-- INSERT HERE -->
     <?php 
                    
         include_once ('insertNote.php');
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                if(isset($_POST['add'])){
 
                  $title = $_POST['title'];
                 $descrip = $_POST['descrip'];
@@ -197,5 +234,36 @@ include_once ('..//connection/dbConnect.php');
                 echo "Error: " . $e->getMessage();                 
             }
 
-            }                      
+            }  
+        }                    
+    ?>
+    <!-- DELETE HEARE -->
+    <?php 
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+        include_once ('insertNote.php');
+
+        if(isset($_POST['del'])){
+
+            $delId = $_POST['noteId'];
+
+            try {
+                
+                $conn = connectDB();
+
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                deleting($delId);  
+            
+
+            } catch  (PDOException $e) {
+                echo "Error: " . $e->getMessage();                 
+            }
+            
+
+
+        }
+
+    }
+    
     ?>

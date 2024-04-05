@@ -34,3 +34,4 @@ function closeForm(){
 addNote.addEventListener('click',openForm);
 cancel.addEventListener('click',closeForm);
 // add.addEventListener('click', submited);
+
