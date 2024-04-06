@@ -35,3 +35,13 @@ addNote.addEventListener('click',openForm);
 cancel.addEventListener('click',closeForm);
 // add.addEventListener('click', submited);
 
+function idTodele(id, title){
+    document.getElementById('noteId').value = id;
+    document.getElementById('nameDel').innerHTML = "Are you Sure to delete "+title+"?";
+    document.getElementById('overlayNote').style.display = 'flex';
+}
+function cancelDel(){
+    document.getElementById('noteId').value = "";
+    document.getElementById('nameDel').innerHTML = "";
+    document.getElementById('overlayNote').style.display = 'none';
+}

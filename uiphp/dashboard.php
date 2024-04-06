@@ -23,10 +23,10 @@ include_once ('..//connection/dbConnect.php');
                         <div id="addNote"><p>Add Notes</p></div>                        
                     </div>
             </div>
-            <form action=""></form>
+
             <div class="boardPag">
             <div class="board">
-             <input type="hidden" name="notId">
+
     <?php
         $limito = 3; 
         $page = isset($_GET['page']) ? $_GET['page'] : 1; 
@@ -53,7 +53,7 @@ include_once ('..//connection/dbConnect.php');
                             <h2> Note #{$row['n_id']}</h2>
                             <h1>{$row['n_title']}</h1>
                             <h3>{$row['n_date']}</h3>
-                            <div>     
+                            <div class = 'actions'>     
 
                                 <button id = 'views' onclick='openNote()'>view</button>
 
@@ -90,7 +90,7 @@ include_once ('..//connection/dbConnect.php');
 
             <div class="overlay1" id="overNote">
                 <div class="noteForm">
-
+                    <div class="noteCont1">
                     <form action="" method="post">
                         <label for="title">Note Title:</label>
                         <br>
@@ -109,6 +109,7 @@ include_once ('..//connection/dbConnect.php');
                         </div>
 
                     </form>
+                    </div>
 
                 
 
@@ -122,8 +123,6 @@ include_once ('..//connection/dbConnect.php');
                   <h2  id = "ntitle"></h2>
                   <textarea name="ndesc" id="ndesc" cols="30" rows="10"></textarea>
                     <h4  id = "ndate"></h4>
-                  <button id="sira" onclick="closeNote()">close</button>
-
                   <button id="sira" onclick="closeNote()">close</button>
 
                 </div>
@@ -165,36 +164,27 @@ include_once ('..//connection/dbConnect.php');
             ?>
             </div>
 
-    <div class = 'confirmBox' id = 'confirmBox'>
-        <h3>Are you Sure? <p id ="nameDel"></p></h3>
-
-            <form action='' method ='post'>
-                <button id = 'del' name = 'del'>delete</button>
-                <input type='hidden' id = 'noteId' name='noteId'>
-            </form>
-            <button id="cance" name="cance" onclick="cancelDel()">cancel</button>
-    </div>
+            <div class="overlayNote" id ='overlayNote'>
+            <div class = 'confirmBox' id = 'confirmBox'>
+                <div class = 'confirmCont'>
+                <h3 id ="nameDel"></h3>
+                <div class = 'delBut'>
+                    <form action='' method ='post'>
+                        <button id = 'del' name = 'del'>delete</button>
+                        <input type='hidden' id = 'noteId' name='noteId'>
+                    </form>
+                    
+                    <button id="cance" name="cance" onclick="cancelDel()">cancel</button>
+                </div>
+            </div>
+            </div>
+            </div>
 
         </div>
 
     </div>
 
 <script src="..//script/jsCode.js"></script>
-
-<script>
-
-    function idTodele(id, title){
-        document.getElementById('noteId').value = id;
-        document.getElementById('nameDel').innerHTML = title;
-        document.getElementById('confirmBox').style.display = 'block';
-    }
-    function cancelDel(){
-        document.getElementById('noteId').value = "";
-        document.getElementById('nameDel').innerHTML = "";
-        document.getElementById('confirmBox').style.display = 'none';
-    }
-
-</script>
 
 <script>
 

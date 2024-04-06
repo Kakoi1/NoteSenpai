@@ -8,13 +8,15 @@ include_once ('..//connection/dbConnect.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="..//css/dashboard.css">
 </head>
 <body>
         <div class="container">
-            <div class="innerCont">
+            <div class="innerView">
+                <div class = 'viewCont'>
             <?php
     
-
+    
     try {
         $conn = connectDB();
         
@@ -34,19 +36,26 @@ include_once ('..//connection/dbConnect.php');
 
                     <input type="hidden" name="nid" value="<?php echo $userData['n_id']; ?>">
 
-                    <label for="ntitle">Name:</label>
+                    <label for="ntitle">Title:</label>
+                    <br>
                     <input type="text" name="ntitle" id="ntitle" value="<?php echo $userData['n_title']; ?>">
+                    <br>
 
                     <label for="desc">Note Description:</label>
+                    <br>
                     <textarea name="desc" id="desc" cols="30" rows="10" value =""><?php echo $userData['n_description']; ?></textarea>
+                    <br>
 
                     <h4 id="dates">Date Posted: <?php echo $userData['n_date']; ?></h4>
 
-    
+                    <br>
                     <div class="button-container">
                         <button type="submit" class="update-button" name = "save">Save</button>
+                        <button class="cancel-button" name = "back">Cancel</button>
                     </div>
                 </form>
+
+                </div>
     <?php
             } else {
                 echo "<p>User not found.</p>";
@@ -88,6 +97,10 @@ include_once ('..//connection/dbConnect.php');
 
         }
 
+    }
+
+    if(isset($_POST['back'])){
+        header("Location: dashboard.php");
     }
 
 ?>
