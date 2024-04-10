@@ -22,7 +22,7 @@ include_once ('..//connection/dbConnect.php');
         
         if ($conn && isset($_POST['notId'])) {
             $notId = $_POST['notId'];
-            $sql = "SELECT `n_id`, `n_title`, `n_description`, `n_date` FROM `notes` WHERE  `n_id` = :nid";
+            $sql = "SELECT `n_id`, `n_title`, `n_description`, `n_date`, star, archive FROM `notes` WHERE  `n_id` = :nid";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':nid', $notId);
             $stmt->execute();
@@ -34,7 +34,13 @@ include_once ('..//connection/dbConnect.php');
     ?>
                 <form action="" method="post">
 
+                <input type="hidden" id="current_time" name="current_time" value="<?php echo date('Y-m-d'); ?>" readonly><br><br>
+
                     <input type="hidden" name="nid" value="<?php echo $userData['n_id']; ?>">
+
+                    <input type="hidden" name="star" value="<?php echo $userData['star']; ?>">
+
+                    <input type="hidden" name="arc" value="<?php echo $userData['archive']; ?>">
 
                     <label for="ntitle">Title:</label>
                     <br>
@@ -81,15 +87,19 @@ include_once ('..//connection/dbConnect.php');
         if(isset($_POST['save'])){
 
             $n_id = $_POST['nid'];
+            $star = $_POST['star'];
+            $arc = $_POST['arc'];
             $n_title = $_POST['ntitle'];
             $n_description = $_POST['desc'];
+            $date = $_POST['current_time'];
 
             try {
                 $conn = connectDB();
                 
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                updating($n_title,$n_description,$n_id);
+                updating($n_title,$n_description,$n_id,$star,$arc,$date);
+                header("Location: dashboard.php");
 
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();                 
@@ -101,6 +111,7 @@ include_once ('..//connection/dbConnect.php');
 
     if(isset($_POST['back'])){
         header("Location: dashboard.php");
+
     }
 
 ?>

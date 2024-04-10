@@ -1,5 +1,33 @@
 <?php 
+session_start();
 include_once ('..//connection/dbConnect.php');
+
+$emails = $_SESSION['email'];
+
+    if($emails != false){
+        try {
+
+            $conn = connectDB();
+
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+            $sql = "SELECT * FROM `accounts` WHERE `email` = :emil";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':emil', $emails);
+            $stmt->execute();
+            
+            $dataUser = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+
+            } catch  (PDOException $e) {
+            echo "Error: " . $e->getMessage();                 
+            }
+    }else{
+        echo "<script>alert('no data found');
+        document.location.href = 'logout.php';
+    </script>";
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,6 +37,7 @@ include_once ('..//connection/dbConnect.php');
     <title>Document</title>
 </head>
 <link rel="stylesheet" href="..//css/dashboard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <body>
     <div class="container">
 
@@ -16,81 +45,40 @@ include_once ('..//connection/dbConnect.php');
             <div class="navbar">
                 <h1>Note App</h1>
                 <div class="imag">
-                    <div class="pic"><img src="..//icons/user.jpg" alt=""></div>
-                    <div class="nams">Name here</div>
+                    <div class="pic"><i class="bi bi-person-circle"></i></div>
+                    <h3 id='nams'><?php echo $dataUser['name'];?></h3>
                 </div>
                     <div class="navButon" >
-                        <div id="addNote"><p>Add Notes</p></div>                        
+                        
+                        <div  onclick="showTab(1)"><p>Dashboard</p></div> 
+                        <div id="fav" onclick="showTab(2)"><p>Favorites</p></div> 
+                        <div id="archives" onclick="" ><p><a href="archiveNotes.php">Archived Notes</a></p></div>
+                        <div id="archives" onclick="" ><p><a href="logout.php">Log Out</a></p></div>
+                        <div id="archives" onclick="" ><p><a href="userEdit.php">Log Out</a></p></div>
+                                          
                     </div>
             </div>
 
-            <div class="boardPag">
+            <div class="content">  <!-- MAIN CONTAINER FOR CONTENTS -->
+            
+            <!-- CONTENT 1 ACTIVE -->
+                <div class="tab-content tab1-content active">
+                <div class="boardPag">
             <div class="board">
-
+            <div class="noteConts" id="addNote"><img src="..//images/icons8-add-note-96.png" alt="" width="200px" height="200px" ></div>
     <?php
-        $limito = 3; 
+        $limito = 10; 
         $page = isset($_GET['page']) ? $_GET['page'] : 1; 
-        $starto = ($page - 1) * $limito;
-        // $limito = 2; 
-        // $starto = 0;
+
+        include_once('allNote.php');
     
-        try {
-            $conn = connectDB();
-
-            if ($conn) {
-                $sql = "SELECT * FROM `notes` LIMIT :starto, :limito";
-                $stmt = $conn->prepare($sql);                
-                $stmt->bindParam(':starto', $starto, PDO::PARAM_INT);
-                $stmt->bindParam(':limito', $limito, PDO::PARAM_INT);
-                $stmt->execute();
-
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-         
-                foreach ($result as $row) {
-
-                    echo "<div class = 'noteCont' onclick=\"populateNote(" . $row["n_id"] . ", '" . $row["n_title"] . "', '" . $row["n_description"] . "', '" . $row["n_date"] . "')\">
-
-                            <h2> Note #{$row['n_id']}</h2>
-                            <h1>{$row['n_title']}</h1>
-                            <h3>{$row['n_date']}</h3>
-                            <div class = 'actions'>     
-
-                                <button id = 'views' onclick='openNote()'>view</button>
-
-                                <form action='viewing.php' method ='post'>
-                               <button id = 'edit' onclick=''>edit</button>
-                               <input type='hidden' name='notId' value = ' {$row['n_id']}'>
-                               </form>
-
-                              
-                               <button id = 'del' name = 'del' onclick=\"idTodele(" . $row["n_id"] . ", '" . $row["n_title"] . "')\">delete</button>
-                               
-
-                            </div>
-                        </div>";
-
-                }
-                
-            }
-        } catch (PDOException $e) {
-
-            echo "Error: " . $e->getMessage();
-
-        } finally {
-
-            if ($conn) {
-
-                $conn = null;
-
-            }
-        }
   
     ?>
     </div>
-
+        
             <div class="overlay1" id="overNote">
                 <div class="noteForm">
-                    <div class="noteCont1">
+    
                     <form action="" method="post">
                         <label for="title">Note Title:</label>
                         <br>
@@ -99,39 +87,24 @@ include_once ('..//connection/dbConnect.php');
                         <label for="descrip">Note Description</label>
                         <br>
                         <textarea name="descrip" id="descrip" cols="100" rows="4" ></textarea>
-                                                
-                        <div class="submitBut">
-
+                            <br><br>                 
+                        <div class="button-container">
 
                         <input id="add" name="add" class="add" type="submit" value="add">
-                        <input id="cancel" name="cancel" class="cancel" type="button" value="cancel"> 
+                        <input id="cancel" name="cancel" class="cancel" type="button" onclick="closeForm()" value="cancel"> 
 
                         </div>
 
                     </form>
-                    </div>
-
-                
 
                 </div>
             </div>
 
-            <div class="overlay" id="viewNote">
-                <div class="viewForm">
-
-                <h3 id = "nid"></h3>
-                  <h2  id = "ntitle"></h2>
-                  <textarea name="ndesc" id="ndesc" cols="30" rows="10"></textarea>
-                    <h4  id = "ndate"></h4>
-                  <button id="sira" onclick="closeNote()">close</button>
-
-                </div>
-            </div>
 
             <?php 
 
             $conn = connectDB();
-                $sqli = 'SELECT * FROM `notes`';
+                $sqli = 'SELECT * FROM `notes` WHERE archive = 0';
                 $stmt = $conn->prepare($sqli);
                 $stmt->execute();
                 $num_rows = 0;
@@ -164,27 +137,75 @@ include_once ('..//connection/dbConnect.php');
             ?>
             </div>
 
+          
+
+            </div><!-- END CONTENT 1 -->
+
+              
+            <div class="tab-content tab2-content">  <!-- COntent 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+
+            <div class='boardPag'>
+            <div class='board'>
+            
+    <?php
+
+        include_once("favourites.php");
+
+       
+
+    ?>
+    </div>
+
+            </div>
+       
+
+
+        </div>
+        </div>
             <div class="overlayNote" id ='overlayNote'>
             <div class = 'confirmBox' id = 'confirmBox'>
                 <div class = 'confirmCont'>
                 <h3 id ="nameDel"></h3>
                 <div class = 'delBut'>
                     <form action='' method ='post'>
-                        <button id = 'del' name = 'del'>delete</button>
+                        <button id = 'del' name = 'del'>Remove</button>
                         <input type='hidden' id = 'noteId' name='noteId'>
+                        <input type='hidden' id = 'titil' name='titil'>
+                        <input type='hidden' id = 'descri' name='descri'>
+                        <input type='hidden' id = 'dats' name='dats'>
+                        <input type='hidden' id = 'str' name='str'>
+                        <input type='hidden' id = 'arch' name='arch'>
                     </form>
                     
-                    <button id="cance" name="cance" onclick="cancelDel()">cancel</button>
+                    <button id="cance" name="cance" onclick="cancelDel()">Cancel</button>
                 </div>
             </div>
             </div>
             </div>
 
-        </div>
+            
+            <div class="overlay" id="viewNote">
+                <div class="viewForm">
+
+                <h3 id = "nid"></h3>
+                  <h2  id = "ntitle"></h2>
+                  <textarea name="ndesc" id="ndesc" cols="30" rows="10" readonly></textarea>
+                    <h4  id = "ndate"></h4>
+                    <br>
+                  <button id="sira" onclick="closeNote()">close</button>
+
+                </div>
+            </div>
 
     </div>
 
 <script src="..//script/jsCode.js"></script>
+
+<script>
+function updateStar() {
+    document.getElementById('starForm').submit();
+}
+</script>
 
 <script>
 
@@ -194,7 +215,8 @@ include_once ('..//connection/dbConnect.php');
     var selectedPageLink = document.getElementById('page_' + currentPage);
 
     selectedPageLink.style.color = 'white';
-    selectedPageLink.style.backgroundColor = 'violet';
+    selectedPageLink.style.backgroundColor = 'rgb(86, 7, 7)';
+ 
     selectedPageLink.style.fontWeight = 'bold';
 
 </script>
@@ -209,9 +231,9 @@ include_once ('..//connection/dbConnect.php');
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if(isset($_POST['add'])){
-
                  $title = $_POST['title'];
                 $descrip = $_POST['descrip'];
+                
 
             try {
                 $conn = connectDB();
@@ -229,13 +251,45 @@ include_once ('..//connection/dbConnect.php');
     ?>
     <!-- DELETE HEARE -->
     <?php 
+    // if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    //     include_once ('insertNote.php');
+
+    //     if(isset($_POST['del'])){
+
+    //         $delId = $_POST['noteId'];
+
+    //         try {
+                
+    //             $conn = connectDB();
+
+    //             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    //             deleting($delId);  
+            
+
+    //         } catch  (PDOException $e) {
+    //             echo "Error: " . $e->getMessage();                 
+    //         }
+            
+
+
+    //     }
+
+    // }
+
     if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         include_once ('insertNote.php');
 
         if(isset($_POST['del'])){
 
-            $delId = $_POST['noteId'];
+            $n_id = $_POST['noteId'];
+            $star = $_POST['str'];
+            $n_title = $_POST['titil'];
+            $n_description = $_POST['descri'];
+            $date = $_POST['dats'];
+            $arc = 1;
 
             try {
                 
@@ -243,8 +297,9 @@ include_once ('..//connection/dbConnect.php');
 
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                deleting($delId);  
+                updating($n_title,$n_description,$n_id,$star,$arc,$date);
             
+                echo "<script>window.history.back();</script>";
 
             } catch  (PDOException $e) {
                 echo "Error: " . $e->getMessage();                 
@@ -257,3 +312,41 @@ include_once ('..//connection/dbConnect.php');
     }
     
     ?>
+    <?php 
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    include_once ('insertNote.php');
+    // if (isset($_POST['yawa'])) { 
+
+        
+        $isStarred = isset($_POST['starred']) ? 1 : 0;
+        $noteId = $_POST['notId']; 
+        $title = $_POST['notTit'];
+        $descrip = $_POST['notDesc'];
+        $notDate = $_POST['notDate'];
+        $notArc = $_POST['notArc'];
+        try {
+            $conn = connectDB();
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+         
+            if ($isStarred) {
+                // $sql = "UPDATE `notes` SET `star`='1' WHERE `n_id` = :id";
+                $star =1;
+            } else {
+                // $sql = "UPDATE `notes` SET `star`='0' WHERE `n_id` = :id";
+                $star = 0;
+            }
+
+            updating($title,$descrip,$noteId,$star,$notArc,$notDate);
+
+            echo "<script>window.history.back();</script>";
+
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+// }
+?>
+  
+    
