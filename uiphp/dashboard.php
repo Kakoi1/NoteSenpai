@@ -53,8 +53,9 @@ $emails = $_SESSION['email'];
                         <div  onclick="showTab(1)"><p>Dashboard</p></div> 
                         <div id="fav" onclick="showTab(2)"><p>Favorites</p></div> 
                         <div id="archives" onclick="" ><p><a href="archiveNotes.php">Archived Notes</a></p></div>
+                        <div id="archives" onclick="" ><p><a href="userEdit.php">Edit User</a></p></div>
                         <div id="archives" onclick="" ><p><a href="logout.php">Log Out</a></p></div>
-                        <div id="archives" onclick="" ><p><a href="userEdit.php">Log Out</a></p></div>
+                       
                                           
                     </div>
             </div>
@@ -298,8 +299,11 @@ function updateStar() {
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 updating($n_title,$n_description,$n_id,$star,$arc,$date);
-            
-                echo "<script>window.history.back();</script>";
+                
+                echo "<script>location.href = location.href;</script>";
+                // header("Location: ".$_SERVER['PHP_SELF']);
+                // exit();
+                
 
             } catch  (PDOException $e) {
                 echo "Error: " . $e->getMessage();                 
@@ -340,7 +344,7 @@ function updateStar() {
 
             updating($title,$descrip,$noteId,$star,$notArc,$notDate);
 
-            echo "<script>window.history.back();</script>";
+            echo "<script>location.href = location.href;</script>";
 
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();

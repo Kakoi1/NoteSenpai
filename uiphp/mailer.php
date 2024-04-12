@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </script>";
         }
        }else{
-        echo "<script>alert('Wrong Verification code');</script>";
+        echo "<script>alert('Wrong Verification code');window.history.back();</script>";
        }
        
     } catch  (PDOException $e) {

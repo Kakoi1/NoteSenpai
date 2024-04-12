@@ -36,7 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "</script>";
             $message = "Password Doesnt Match";
 
-        }else if($stm->rowCount() > 0){
+        } else if (strlen($pass) < 8||strlen($repass) < 8) {
+            echo "<script>";
+            echo "document.addEventListener('DOMContentLoaded', function() {";
+            echo "    document.getElementById('popup').style.display = 'block';";
+            echo "});";
+            echo "</script>";
+            $message = "Password must have at least 8 characters.";
+        }
+        
+        else if($stm->rowCount() > 0){
             echo "<script>";
             echo "document.addEventListener('DOMContentLoaded', function() {";
             echo "    document.getElementById('popup').style.display = 'block';";

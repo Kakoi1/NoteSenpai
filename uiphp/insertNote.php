@@ -6,7 +6,7 @@
 
 
                         if(empty($title)||empty($descrip)){
-                            echo '<script>alert("bogo");window.history.back();</script>';
+                            echo '<script>alert("All fields Must be Inputed ");window.history.back();</script>';
                         }else{   
                     try {
                         $conn = connectDB();
@@ -17,8 +17,7 @@
                         $stmt->bindParam(':descrip', $descrip, PDO::PARAM_STR);
                         $stmt->execute();
 
-                        header("Location: ".$_SERVER['dashboard.php']);
-                        echo "<script>window.history.back();</script>";
+                        echo "<script>location.href = location.href;</script>";
                     } catch (PDOException $e) {
                         echo "Error: " . $e->getMessage();
                     } finally {
@@ -89,7 +88,7 @@
                         if(empty($n_id)){
                             // echo '<script>alert("update bogo");window.history.back();</script>';
                         }else if(empty($n_title)||empty($n_description)){
-                            echo '<script>alert("yawa bogo");window.history.back();</script>';
+                            echo '<script>alert("all Fields Must be Inputed");window.history.back();</script>';
                         }else{   
                     try {
                         $conn = connectDB();
@@ -136,8 +135,8 @@
                             $stam->bindParam(':dId', $n_id);
                             $stam->execute();
             
-                            header("Location: ".$_SERVER['dashboard.php']);
-                            echo "<script>window.history.back();</script>";
+                            echo "<script>location.href = location.href;</script>";
+                            // echo "<script>window.history.back();</script>";
                             
                         } catch (PDOException $e) {
                             echo "Error: " . $e->getMessage();
@@ -166,8 +165,7 @@ require '..//phpmailer/src/SMTP.php';
 
 //Create an instance; passing `true` enables exceptions
 function senEmail($code, $resEmail){
-// if (isset($_POST["send"])) {
-  // $code = rand(999999, 111111);
+
   $mail = new PHPMailer(true);
 
     //Server settings
@@ -191,14 +189,7 @@ function senEmail($code, $resEmail){
 
     // Success sent message alert
     $mail->send();
-    // echo
-    // " 
-    // <script> 
-    //  alert('Message was sent successfully!');
-    //  document.location.href = 'index.php';
-    // </script>
-    // ";
-  // }
+
 }
 
 ?>
@@ -218,7 +209,7 @@ function requestCode($tokens,$userEmail,$actions){
 
         if ($stm->rowCount() > 0) {
 
-        senEmail($tokens, $userEmail);
+        // senEmail($tokens, $userEmail);
         if($actions == "forgotPass"){
         echo "<script>alert('Verification Code is Sent To your Email');
                 document.location.href = 'mailer.php';

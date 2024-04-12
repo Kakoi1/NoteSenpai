@@ -22,7 +22,18 @@ $message = "";
             echo "</script>";
             $message = "Password Doesn't Match";
 
-            }else{
+            } else if (strlen($pass) < 8||strlen($repass) < 8) {
+                
+                echo "<script>";
+            echo "document.addEventListener('DOMContentLoaded', function() {";
+            echo "    document.getElementById('popup').style.display = 'block';";
+            echo "});";
+            echo "</script>";
+            $message = "Password must have at least 8 characters.";
+
+            }
+            
+            else{
                 try {
 
                     $conn = connectDB();

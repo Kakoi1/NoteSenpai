@@ -20,7 +20,10 @@ $message = "";
             $hashedPassword = sha1($pass.$salt);
 
             if($pass !== $repass){
-                echo '<script>alert("Password Dont Match");</script>';
+                echo '<script>alert("Password Dont Match");window.history.back();</script>';
+            }
+            else if (strlen($pass) < 8||strlen($repass) < 8) {
+                echo '<script>alert("Password must have at least 8 characters.");window.history.back();</script>';
             }
             else{
                 $_SESSION['use']=$use;
